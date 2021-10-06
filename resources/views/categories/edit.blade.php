@@ -4,7 +4,7 @@
 
 @section('content')
 
-        <form action="/categories/{{ $category->id }}" method="post">
+        <form action="{{ route('categories.update', $category->id) }}" method="post">
             @csrf
             @method('put')
             

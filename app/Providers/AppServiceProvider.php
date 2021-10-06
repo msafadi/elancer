@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
@@ -37,5 +38,9 @@ class AppServiceProvider extends ServiceProvider
             }
             return true;
         }, 'Invalid word');
+
+        Paginator::useBootstrap();
+        //Paginator::defaultView('vendor.pagination.tailwind');
+        //Paginator::defaultSimpleView('vendor.pagination.simple-tailwind');
     }
 }

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Rules\FilterRule;
 use Illuminate\Http\Request;
@@ -32,10 +33,15 @@ class CategoriesController extends Controller
     ];
 
     // Actions
-    public function index($slug, $id = 0)
+    public function index()
     {
         //$categories = DB::table('categories')->get();
-        $categories = Category::get();
+        $categories = Category::leftJoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
+            ->select([
+                'categories.*',
+                'parents.name as parent_name',
+            ])
+            ->paginate();
 
         //$flashMessage = session('success', false);
         //$flashMessage = session()->get('success', false);
@@ -49,14 +55,14 @@ class CategoriesController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show(Category $category)
     {
         // $category = DB::table('categories')
         //     ->where('id', '=', $id)
         //     ->first();
         
         // $category = Category::where('id', '=', $id)->firstOrFail();
-        $category = Category::findOrFail($id);
+        // $category = Category::findOrFail($id);
         
         // if ($category == null) {
         //     abort(404);
@@ -97,22 +103,30 @@ class CategoriesController extends Controller
         //     $request->query('name'); // Only query parameters
 
         //DB::table('categories')->insert([]);
-        $category = new Category();
-        $category->name = $request->input('name');
-        $category->description = $request->input('description');
-        $category->parent_id = $request->input('parent_id');
-        $category->slug = Str::slug($category->name);
-        $category->save();
+        // $category = new Category();
+        // $category->name = $request->input('name');
+        // $category->description = $request->input('description');
+        // $category->parent_id = $request->input('parent_id');
+        // $category->slug = Str::slug($category->name);
+        // $category->save();
+
+        $data = $request->all();
+        if (! $data['slug']) {
+            $data['slug'] = Str::slug($data['name']);
+        }
+
+        $category = Category::create( $data );
 
         // PRG: Post Redirect Get
-        return redirect('/categories')
+        return redirect()
+            ->route('categories.index')
             ->with('success', 'Category created!');
 
     }
 
-    public function edit($id)
+    public function edit(Category $category)
     {
-        $category = Category::findOrFail($id);
+        //$category = Category::findOrFail($id);
         $parents = Category::all();
 
         //dd($parents->pluck('name', 'id')->toArray());
@@ -120,19 +134,22 @@ class CategoriesController extends Controller
         return view('categories.edit', compact('category', 'parents'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        $category = Category::findOrFail($id);
+        //$category = Category::findOrFail($id);
 
         $clean = $request->validate($this->rules(), $this->messages);
 
-        $category->name = $request->input('name');
-        $category->description = $request->input('description');
-        $category->parent_id = $request->input('parent_id');
-        $category->slug = Str::slug($category->name);        
-        $category->save();
+        // $category->name = $request->input('name');
+        // $category->description = $request->input('description');
+        // $category->parent_id = $request->input('parent_id');
+        // $category->slug = Str::slug($category->name);        
+        // $category->save();
 
-        return redirect('/categories')
+        $category->update($request->all());
+
+        return redirect()
+            ->route('categories.index')
             ->with('success', 'Category updated!');
     }
 
@@ -147,10 +164,11 @@ class CategoriesController extends Controller
 
         //session()->flash('success', 'Category deleted!');
         //Session::flash('success', 'Category deleted!');
-        Session::put('success', 'Category deleted!');
+        //Session::put('success', 'Category deleted!');
 
-        return redirect('/categories');
-            //->with('success', 'Category deleted!');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Category deleted!');
 
     }
 

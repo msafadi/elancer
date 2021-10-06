@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('page-title')
-    Categories <small><a href="/categories/create" class="btn btn-sm btn-outline-primary">Create</a></small>
+    Categories <small><a href="{{ route('categories.create') }}" class="btn btn-sm btn-outline-primary">Create</a></small>
 @endsection
 
 @section('content')
@@ -25,13 +25,13 @@
             @foreach ($categories as $category)
             <tr>
                 <td>{{ $category->id }}</td>
-                <td><a href="/categories/{{ $category->id }}">{{ $category->name }}</a></td>
+                <td><a href="{{ route('categories.show', ['category' => $category->id]) }}">{{ $category->name }}</a></td>
                 <td>{{ $category->slug }}</td>
-                <td>{{ $category->parent_id }}</td>
+                <td>{{ $category->parent_name }}</td>
                 <td>{{ $category->created_at }}</td>
-                <td><a href="/categories/{{ $category->id }}/edit" class="btn btn-sm btn-dark">Edit</a></td>
+                <td><a href="{{ route('categories.edit', [$category->id]) }}" class="btn btn-sm btn-dark">Edit</a></td>
                 <td>
-                    <form action="categories/{{ $category->id }}" method="post">
+                    <form action="{{ route('categories.destroy', $category->id) }}" method="post">
                         @csrf
                         @method('delete')
                         <button class="btn btn-sm btn-danger">Delete</button>
@@ -42,4 +42,7 @@
         </tbody>
     </table>
 </div>
+
+{{ $categories->withQueryString()->appends(['q' => 'test'])->links() }}
+
 @endsection

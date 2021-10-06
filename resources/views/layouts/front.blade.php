@@ -344,7 +344,6 @@
         </header>
         <div class="clearfix"></div>
         <!-- Header Container / End -->
-            {{ $header }}
 
             {{ $slot }}
 

@@ -1,9 +1,4 @@
 <x-front-layout title="Home Page">
-    <x-slot name="header">
-        <h2>Home Page</h2>
-        <p>Home page description</p>
-    </x-slot>
-
     <!-- Intro Banner
 ================================================== -->
     <div class="intro-banner dark-overlay" data-background-image="images/home-background-02.jpg">

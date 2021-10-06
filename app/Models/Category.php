@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name', 'parent_id', 'slug', 'description', 'art_path',
+    ];
+
+    // protected $guarded = [];
+
+    protected $perPage = 2;
 }
