@@ -291,6 +291,7 @@
                                 </div>
 
                                 <!-- Dropdown -->
+                                @auth
                                 <div class="header-notifications-dropdown">
 
                                     <!-- User Status -->
@@ -300,7 +301,7 @@
                                         <div class="user-details">
                                             <div class="user-avatar status-online"><img src="{{ asset('assets/front/images/user-avatar-small-01.jpg') }}" alt=""></div>
                                             <div class="user-name">
-                                                Tom Smith <span>Freelancer</span>
+                                                {{ Auth::user()->name }} <span>Freelancer</span>
                                             </div>
                                         </div>
 
@@ -316,10 +317,14 @@
                                     <ul class="user-menu-small-nav">
                                         <li><a href="dashboard.html"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
                                         <li><a href="dashboard-settings.html"><i class="icon-material-outline-settings"></i> Settings</a></li>
-                                        <li><a href="index-logged-out.html"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+                                        <li><a  href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout').submit();"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
                                     </ul>
+                                    <form action="{{ route('logout') }}" method="post" style="display: none;" id="logout">
+                                        @csrf
+                                    </form>
 
                                 </div>
+                                @endauth
                             </div>
 
                         </div>
