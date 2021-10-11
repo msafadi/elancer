@@ -41,4 +41,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // User has one freelaner profile
+    public function freelancer()
+    {
+        return $this->hasOne(Freelancer::class, 'user_id', 'id')
+            ->withDefault();
+    }
 }
