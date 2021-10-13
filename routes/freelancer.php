@@ -11,6 +11,7 @@ Route::group([
 
     Route::get('profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
+        
     Route::put('profile', [ProfileController::class, 'update']);
 
 });
