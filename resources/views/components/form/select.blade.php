@@ -1,8 +1,10 @@
 @props([
-    'id', 'label', 'name', 'selected' => '', 'options' => []
+    'id' => '', 'label', 'name', 'selected' => '', 'options' => []
 ])
 
+@if (isset($label))
 <label for="{{ $id }}">{{ $label }}</label>
+@endif
 <select 
     id="{{ $id }}" 
     name="{{ $name }}" 

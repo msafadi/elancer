@@ -8,7 +8,8 @@
 
                 <!-- Headline -->
                 <div class="headline">
-                    <h3><i class="icon-material-outline-business-center"></i> My Job Listings</h3>
+                    <h3><i class="icon-material-outline-business-center"></i> My Job Listings
+                    <small><a href="{{ route('client.projects.create') }}" class="btn btn-sm btn-outline-primary">Post Job</a></small></h3>
                 </div>
 
                 <div class="content">
@@ -29,7 +30,12 @@
                                         <div class="job-listing-footer">
                                             <ul>
                                                 <li><i class="icon-material-outline-date-range"></i> Posted on {{ $project->created_at }}</li>
-                                                <li><i class="icon-material-outline-date-range"></i> Expiring on 28 July, 2018</li>
+                                                <li><i class="icon-material-outline-bookmarks"></i> Category: {{ $project->category->parent->name }} / {{ $project->category->name }}</li>
+                                                <li><i class="icon-material-outline-bookmarks"></i>  Tags:
+                                                    @foreach ($project->tags as $tag)
+                                                    <span class="bg-primary mx-1">{{ $tag->name }}</span>
+                                                @endforeach
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>

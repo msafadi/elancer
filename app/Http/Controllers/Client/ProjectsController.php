@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\ProjectRequest;
+use App\Models\Category;
 use App\Models\Project;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ProjectsController extends Controller
 {
@@ -18,8 +21,8 @@ class ProjectsController extends Controller
     public function index()
     {
         $user = Auth::user();
-        //$projects = Project::where('user_id', '=', $user->id)->paginate();
-        $projects = $user->projects()->paginate();
+        //$projects = Project::with('category')->where('user_id', '=', $user->id)->paginate();
+        $projects = $user->projects()->with('category.parent', 'tags')->paginate();
 
         return view('client.projects.index', [
             'projects' => $projects,
@@ -35,6 +38,9 @@ class ProjectsController extends Controller
     {
         return view('client.projects.create', [
             'project' => new Project(),
+            'types' => Project::types(),
+            'categories' => $this->categories(),
+            'tags' => [],
         ]);
     }
 
@@ -54,6 +60,8 @@ class ProjectsController extends Controller
         // $project = Project::create($request->all());
 
         $project = $user->projects()->create( $request->all() );
+        $tags = explode(',', $request->input('tags'));
+        $project->syncTags($tags);
 
         return redirect()
             ->route('client.projects.index')
@@ -87,7 +95,12 @@ class ProjectsController extends Controller
         $user = Auth::user();
         $project = $user->projects()->findOrFail($id);
 
-        return view('client.projects.edit', compact('project'));
+        return view('client.projects.edit', [
+            'project' => $project,
+            'types' => Project::types(),
+            'categories' => $this->categories(),
+            'tags' => $project->tags()->pluck('name')->toArray(),
+        ]);
     }
 
     /**
@@ -103,6 +116,8 @@ class ProjectsController extends Controller
         $project = $user->projects()->findOrFail($id);
 
         $project->update($request->all());
+        $tags = explode(',', $request->input('tags'));
+        $project->syncTags($tags);
 
         return redirect()
             ->route('client.projects.index')
@@ -128,5 +143,10 @@ class ProjectsController extends Controller
         return redirect()
             ->route('client.projects.index')
             ->with('success', 'Project deleted');
+    }
+
+    protected function categories()
+    {
+        return Category::pluck('name', 'id')->toArray();
     }
 }
