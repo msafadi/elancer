@@ -70,10 +70,19 @@
                             <h5>Job Description</h5>
                             <x-form.textarea name="description" id="description" :value="$project->description" cols="30" rows="5" class="with-border" />
                             <div class="uploadButton margin-top-30">
-                                <input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload" multiple />
+                                <input class="uploadButton-input" type="file" name="attachments[]" accept="image/*, application/pdf" id="upload" multiple>
                                 <label class="uploadButton-button ripple-effect" for="upload">Upload Files</label>
                                 <span class="uploadButton-file-name">Images or documents that might be helpful in describing your job</span>
                             </div>
+                            @if (is_array($project->attachments))
+                            <div>
+                                <ul>
+                                    @foreach ($project->attachments as $file)
+                                    <li><a href="{{ asset('uploads/' . $file) }}">{{ basename($file) }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
                         </div>
                     </div>
 

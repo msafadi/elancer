@@ -36,7 +36,7 @@ class ProfileController extends Controller
 
         if ($request->hasFile('profile_photo')) {
             $file = $request->file('profile_photo');
-            $filepath = $file->storeAs('profile-photos', [
+            $filepath = $file->store('profile-photos', [
                 'disk' => 'public'
             ]);
 
@@ -47,6 +47,10 @@ class ProfileController extends Controller
         }
         
         $user->freelancer()->updateOrCreate([], $request->all());
+
+        $user->forceFill([
+            'name' => $request->first_name . ' ' . $request->last_name,
+        ])->save();
 
         if ($old_photo && $request->profile_photo_path) {
             Storage::disk('public')->delete($old_photo);

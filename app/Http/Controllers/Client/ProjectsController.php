@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProjectsController extends Controller
@@ -59,7 +60,10 @@ class ProjectsController extends Controller
         // ]);
         // $project = Project::create($request->all());
 
-        $project = $user->projects()->create( $request->all() );
+        $data = $request->except('attachments');
+        $data['attachments'] = $this->uploadAttachments($request);
+
+        $project = $user->projects()->create( $data );
         $tags = explode(',', $request->input('tags'));
         $project->syncTags($tags);
 
@@ -115,7 +119,10 @@ class ProjectsController extends Controller
         $user = Auth::user();
         $project = $user->projects()->findOrFail($id);
 
-        $project->update($request->all());
+        $data = $request->except('attachments');
+        $data['attachments'] = array_merge(($project->attachments ?? []), $this->uploadAttachments($request));
+
+        $project->update($data);
         $tags = explode(',', $request->input('tags'));
         $project->syncTags($tags);
 
@@ -138,7 +145,13 @@ class ProjectsController extends Controller
         //     ->delete();
         
         $user = Auth::user();
-        $user->projects()->where('id', $id)->delete();
+        $project = $user->projects()->findOrFail($id);
+        $project->delete();
+
+        foreach ($project->attachments as $file) {
+            // unlink(storage_path('app/public/' . $file));
+            Storage::disk('public')->delete($file);
+        }
 
         return redirect()
             ->route('client.projects.index')
@@ -148,5 +161,24 @@ class ProjectsController extends Controller
     protected function categories()
     {
         return Category::pluck('name', 'id')->toArray();
+    }
+
+    protected function uploadAttachments(Request $request)
+    {
+        if (!$request->hasFile('attachments')) {
+            return;
+        }
+        $files = $request->file('attachments');
+        $attachemnts = [];
+        foreach ($files as $file) {
+            if ($file->isValid()) {
+                $path = $file->store('/attachments', [
+                    'disk' => 'uploads',
+                ]);
+                $attachemnts[] = $path;
+            }
+        }
+
+        return $attachemnts;
     }
 }

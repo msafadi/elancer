@@ -16,7 +16,12 @@ class Project extends Model
     //protected $guarded = [];
     protected $fillable = [
         'title', 'category_id', 'user_id', 'description', 'budget',
-        'status', 'type',
+        'status', 'type', 'attachments',
+    ];
+
+    protected $casts = [
+        'budget' => 'float',
+        'attachments' => 'json',
     ];
 
     public function user()

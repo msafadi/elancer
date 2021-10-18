@@ -16,6 +16,11 @@ class Freelancer extends Model
         'title', 'hourly_rate', 'country', 'profile_photo_path',
     ];
 
+    protected $casts = [
+        'birthday' => 'datetime',
+        'hourly_rate' => 'float',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
