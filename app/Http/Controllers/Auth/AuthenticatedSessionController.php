@@ -13,6 +13,16 @@ use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
+
+    protected $guard = 'web';
+
+    public function __construct(Request $request)
+    {
+        if ($request->is('admin/*')) {
+            $this->guard = 'admin';
+        }
+    }
+
     /**
      * Display the login view.
      *
@@ -20,7 +30,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        return view('auth.login');
+        return view('auth.login', [
+            'routePrefix' => $this->guard == 'admin'? 'admin.' : '',
+        ]);
     }
 
     /**
@@ -31,7 +43,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
+        $request->authenticate($this->guard);
 
         // Auth::attempt([
         //     'email' => $request->post('email'),
@@ -54,7 +66,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(
+            $this->guard == 'admin'
+            ? '/dashboard'
+            : RouteServiceProvider::HOME
+        );
     }
 
     /**
@@ -67,7 +83,7 @@ class AuthenticatedSessionController extends Controller
     {
         // $request->user(); // == Auth::user();
 
-        Auth::logout();
+        Auth::guard($this->guard)->logout();
 
         $request->session()->invalidate();
 

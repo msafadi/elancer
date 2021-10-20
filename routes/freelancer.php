@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'freelancer',
     'as' => 'freelancer.',
-    'middleware' => ['auth'],
+    'middleware' => ['auth:web'],
 ], function() {
 
     Route::get('profile', [ProfileController::class, 'edit'])
