@@ -46,6 +46,41 @@ class Project extends Model
         );
     }
 
+    public function proposals()
+    {
+        return $this->hasMany(Proposal::class);
+    }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
+    
+    public function propsedFreelancers()
+    {
+        return $this->belongsToMany(
+            User::class, 
+            'proposals', 
+            'project_id',
+            'freelancer_id',
+        )->withPivot([
+            'description', 'cost', 'duration', 'duration_unit', 'status',
+        ]);
+    }
+
+    public function contractedFreelancers()
+    {
+        return $this->belongsToMany(
+            User::class, 
+            'contracts', 
+            'project_id',
+            'freelancer_id',
+        )->withPivot([
+            'proposal_id', 'cost',
+            'type', 'start_on', 'end_on', 'completed_on', 'hours', 'status'
+        ]);
+    }
+
     public static function types()
     {
         return [

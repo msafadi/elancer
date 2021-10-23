@@ -55,6 +55,41 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Project::class, 'user_id', 'id');
     }
 
+    public function proposals()
+    {
+        return $this->hasMany(Proposal::class, 'freelancer_id', 'id');
+    }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class, 'freelancer_id', 'id');
+    }
+
+    public function proposedProjects()
+    {
+        return $this->belongsToMany(
+            Project::class, 
+            'proposals', 
+            'freelancer_id',
+            'project_id'
+        )->withPivot([
+            'description', 'cost', 'duration', 'duration_unit', 'status',
+        ]);
+    }
+
+    public function contractedProjects()
+    {
+        return $this->belongsToMany(
+            Project::class, 
+            'contracts', 
+            'freelancer_id',
+            'project_id'
+        )->withPivot([
+            'proposal_id', 'cost',
+            'type', 'start_on', 'end_on', 'completed_on', 'hours', 'status'
+        ]);
+    }
+
     // Accessor Methods
     // $user->profile_photo_url
     public function getProfilePhotoUrlAttribute()
