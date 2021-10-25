@@ -30,4 +30,14 @@ class Proposal extends Model
             ->withDefault();
     }
 
+    public static function units()
+    {
+        return [
+            'day' => 'Day',
+            'week' => 'Week',
+            'month' => 'Month',
+            'year' => 'Year',
+        ];
+    }
+
 }

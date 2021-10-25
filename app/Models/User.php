@@ -112,4 +112,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->attributes['email'] = Str::lower($value);
     }
+
+    public function routeNotificationForMail($notification = null)
+    {
+        return $this->email;
+    }
 }

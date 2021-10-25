@@ -6,6 +6,7 @@ use App\Models\Proposal;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -36,12 +37,16 @@ class NewPropsalNotification extends Notification
      */
     public function via($notifiable)
     {
-        $via = ['database'];
-        if ($notifiable->notify_mail) {
-            $via[] = 'mail';
-        }
-        if ($notifiable->notify_sms) {
-            $via[] = 'nexmo';
+        $via = ['database', 'mail'];
+
+        if (!$notifiable instanceof AnonymousNotifiable) {
+
+            if ($notifiable->notify_mail) {
+                $via[] = 'mail';
+            }
+            if ($notifiable->notify_sms) {
+                $via[] = 'nexmo';
+            }
         }
         
         return $via;
@@ -55,10 +60,26 @@ class NewPropsalNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        $body = sprintf(
+            '%s applied for a job %s',
+            $this->freelancer->name,
+            $this->proposal->project->title,
+        );
+
+        $message = new MailMessage;
+        $message->subject('New Proposal')
+                ->from('notifications@localhost', 'E-Lancer Notifications')
+                ->greeting('Hello ' . ($notifiable->name ?? ''))
+                ->line($body)
+                ->action('View to Proposal', route('projects.show', $this->proposal->project_id))
+                ->line('Thank you for using our application!');
+                // ->view('mails.proposal', [
+                //     'proposal' => $this->proposal,
+                //     'notifiable' => $notifiable,
+                //     'freelancer' => $this->freelancer
+                // ]);
+
+        return $message;
     }
 
     /**
@@ -67,7 +88,7 @@ class NewPropsalNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toDatabase($notifiable)
     {
         $body = sprintf(
             '%s applied for a job %s',
@@ -79,7 +100,17 @@ class NewPropsalNotification extends Notification
             'title' => 'New Proposal',
             'body' => $body,
             'icon' => 'icon-material-outline-group',
-            'url' => route('client.projects.show', $this->proposal->project_id),
+            'url' => route('projects.show', $this->proposal->project_id),
         ];
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
     }
 }
