@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\AnonymousNotifiable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -37,7 +38,7 @@ class NewPropsalNotification extends Notification
      */
     public function via($notifiable)
     {
-        $via = ['database', 'mail'];
+        $via = ['database', 'mail', 'broadcast'];
 
         if (!$notifiable instanceof AnonymousNotifiable) {
 
@@ -102,6 +103,22 @@ class NewPropsalNotification extends Notification
             'icon' => 'icon-material-outline-group',
             'url' => route('projects.show', $this->proposal->project_id),
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        $body = sprintf(
+            '%s applied for a job %s',
+            $this->freelancer->name,
+            $this->proposal->project->title,
+        );
+
+        return new BroadcastMessage([
+            'title' => 'New Proposal',
+            'body' => $body,
+            'icon' => 'icon-material-outline-group',
+            'url' => route('projects.show', $this->proposal->project_id),
+        ]);
     }
 
     /**

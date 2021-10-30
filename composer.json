@@ -12,6 +12,7 @@
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "pusher/pusher-php-server": "^7.0",
         "symfony/intl": "^5.3"
     },
     "require-dev": {

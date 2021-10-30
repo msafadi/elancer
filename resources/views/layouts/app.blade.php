@@ -350,6 +350,10 @@
 <script src="{{ asset('assets/front/js/magnific-popup.min.js') }}"></script>
 <script src="{{ asset('assets/front/js/slick.min.js') }}"></script>
 <script src="{{ asset('assets/front/js/custom.js') }}"></script>
+<script>
+	const userId = "{{ Auth::id() }}";
+</script>
+<script src="{{ asset('js/app.js') }}"></script>
 
 <!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
 <script>

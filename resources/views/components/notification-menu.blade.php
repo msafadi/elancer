@@ -6,7 +6,7 @@
 
         <!-- Trigger -->
         <div class="header-notifications-trigger">
-            <a href="#"><i class="icon-feather-bell"></i><span>{{ $new }}</span></a>
+            <a href="#"><i class="icon-feather-bell"></i><span id="newNotifications">{{ $new }}</span></a>
         </div>
 
         <!-- Dropdown -->
@@ -21,7 +21,7 @@
 
             <div class="header-notifications-content">
                 <div class="header-notifications-scroll" data-simplebar>
-                    <ul>
+                    <ul id="notificationsList">
                         @foreach ($notifications as $notification)
                         <!-- Notification -->
                         <li class="notifications-not-read">

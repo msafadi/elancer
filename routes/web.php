@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,10 @@ Route::get('/dashboard', function () {
 
 Route::get('projects/{project}', [ProjectsController::class, 'show'])
     ->name('projects.show');
+
+Route::get('messages', [MessagesController::class, 'create'])
+    ->name('messages');
+Route::post('messages', [MessagesController::class, 'store']);
 
 require __DIR__.'/dashboard.php';
 
