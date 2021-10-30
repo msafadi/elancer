@@ -10,10 +10,13 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/fortify": "^1.8",
         "laravel/framework": "^8.54",
+        "laravel/nexmo-notification-channel": "^2.5",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "nexmo/laravel": "^2.4",
         "pusher/pusher-php-server": "^7.0",
-        "symfony/intl": "^5.3"
+        "symfony/intl": "^5.3",
+        "vonage/client": "^2.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

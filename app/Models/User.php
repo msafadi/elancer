@@ -117,4 +117,19 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->email;
     }
+
+    public function routeNotificationForNexmo($notification = null)
+    {
+        return $this->mobile_number;
+    }
+
+    public function routeNotificationForNepras($notification = null)
+    {
+        return $this->mobile_number;
+    }
+
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'App.Models.User.' . $this->id;
+    }
 }

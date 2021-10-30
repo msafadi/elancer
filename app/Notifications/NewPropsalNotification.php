@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Channels\Log;
+use App\Channels\Nepras;
 use App\Models\Proposal;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -9,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\NexmoMessage;
 use Illuminate\Notifications\Notification;
 
 class NewPropsalNotification extends Notification
@@ -38,7 +41,8 @@ class NewPropsalNotification extends Notification
      */
     public function via($notifiable)
     {
-        $via = ['database', 'mail', 'broadcast'];
+        //$via = ['database', 'mail', 'broadcast', 'nexmo'];
+        $via = [Log::class, Nepras::class];
 
         if (!$notifiable instanceof AnonymousNotifiable) {
 
@@ -119,6 +123,42 @@ class NewPropsalNotification extends Notification
             'icon' => 'icon-material-outline-group',
             'url' => route('projects.show', $this->proposal->project_id),
         ]);
+    }
+
+    public function toNexmo($notifiable)
+    {
+        $body = sprintf(
+            '%s applied for a job %s',
+            $this->freelancer->name,
+            $this->proposal->project->title,
+        );
+
+        $message = new NexmoMessage();
+        $message->content($body);
+
+        return $message;
+    }
+
+    public function toLog($notifiable)
+    {
+        $body = sprintf(
+            '%s applied for a job %s',
+            $this->freelancer->name,
+            $this->proposal->project->title,
+        );
+
+        return $body;
+    }
+
+    public function toNepras($notifiable)
+    {
+        $body = sprintf(
+            '%s applied for a job %s',
+            $this->freelancer->name,
+            $this->proposal->project->title,
+        );
+
+        return $body;
     }
 
     /**

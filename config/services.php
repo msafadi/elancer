@@ -30,4 +30,16 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'nexmo' => [
+        'key' => env('NEXMO_KEY'),
+        'secret' => env('NEXMO_SECRET'),
+        'sms_from' => '15556666666',
+    ],
+
+    'nepras' => [
+        'user' => env('NEPRAS_USER'),
+        'pass' => env('NEPRAS_PASS'),
+        'sender' => env('NEPRAS_SENDER'),
+    ]
+
 ];

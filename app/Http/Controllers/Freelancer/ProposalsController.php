@@ -94,8 +94,8 @@ class ProposalsController extends Controller
         // }
         //Notification::send($admins, new NewPropsalNotification($proposal, $user));
 
-        Notification::route('mail', 'test@example.org')
-            ->notify(new NewPropsalNotification($proposal, $user));
+        // Notification::route('mail', 'test@example.org')
+        //     ->notify(new NewPropsalNotification($proposal, $user));
 
 
         return redirect()->route('projects.show', $project->id)

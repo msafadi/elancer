@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,11 @@ Route::get('projects/{project}', [ProjectsController::class, 'show'])
 Route::get('messages', [MessagesController::class, 'create'])
     ->name('messages');
 Route::post('messages', [MessagesController::class, 'store']);
+
+Route::get('otp/request', [OtpController::class, 'create'])->name('otp.create');
+Route::post('otp/request', [OtpController::class, 'store']);
+Route::get('otp/verify', [OtpController::class, 'verifyForm'])->name('otp.verify');
+Route::post('otp/verify', [OtpController::class, 'verify']);
 
 require __DIR__.'/dashboard.php';
 
