@@ -24,6 +24,14 @@ class Project extends Model
         'attachments' => 'json',
     ];
 
+    protected $hidden = [
+        'updated_at',
+    ];
+
+    protected $appends = [
+        'type_name',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -81,6 +89,12 @@ class Project extends Model
         ]);
     }
 
+    // $project->type_name
+    public function getTypeNameAttribute()
+    {
+        return ucfirst($this->type);
+    }
+
     public static function types()
     {
         return [
@@ -102,4 +116,5 @@ class Project extends Model
         }
         $this->tags()->sync($tags_id);
     }
+
 }

@@ -15,6 +15,10 @@ class Category extends Model
 
     // protected $guarded = [];
 
+    protected $hidden = [
+        'created_at', 'updated_at',
+    ];
+
     protected $perPage = 2;
 
     public function projects()
