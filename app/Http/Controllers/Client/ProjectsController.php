@@ -23,7 +23,12 @@ class ProjectsController extends Controller
     {
         $user = Auth::user();
         //$projects = Project::with('category')->where('user_id', '=', $user->id)->paginate();
-        $projects = $user->projects()->with('category.parent', 'tags')->paginate();
+        $projects = $user->projects()
+            ->withoutGlobalScope('active')
+            ->filter(['status' => 'open', 'budget_min' => 1000, 'budget_max' => 4000])
+            ->high()
+            ->with('category.parent', 'tags')
+            ->paginate();
 
         return view('client.projects.index', [
             'projects' => $projects,

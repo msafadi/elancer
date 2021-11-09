@@ -124,9 +124,10 @@ class CategoriesController extends Controller
 
     }
 
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //$category = Category::findOrFail($id);
+        $category = Category::findOrFail($id);
+
         $parents = Category::all();
 
         //dd($parents->pluck('name', 'id')->toArray());
@@ -170,6 +171,35 @@ class CategoriesController extends Controller
             ->route('categories.index')
             ->with('success', 'Category deleted!');
 
+    }
+
+    public function trash()
+    {
+        $categories = Category::onlyTrashed()->paginate();
+        return view('categories.trash', [
+            'categories' => $categories,
+        ]);
+    }
+
+    public function restore(Request $request, $id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->restore();
+
+        return redirect()
+            ->route('categories.trash')
+            ->with('success', 'Category restored!');
+
+    }
+
+    public function forceDelete($id)
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+        $category->forceDelete();
+
+        return redirect()
+            ->route('categories.trash')
+            ->with('success', 'Category deleted for ever!');
     }
 
     protected function rules()

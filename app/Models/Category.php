@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'name', 'parent_id', 'slug', 'description', 'art_path',
@@ -19,7 +21,7 @@ class Category extends Model
         'created_at', 'updated_at',
     ];
 
-    protected $perPage = 2;
+    //protected $perPage = 15;
 
     public function projects()
     {

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => '/dashboard',
     'namespace' => 'Dashboard',
-    'middleware' => ['auth:admin'],
+    'middleware' => ['auth:admin,web'],
 ], function() {
 
     Route::prefix('/categories')
@@ -14,6 +14,8 @@ Route::group([
         ->group(function() {
             Route::get('/', [CategoriesController::class, 'index'])
                 ->name('index');
+            Route::get('/trash', [CategoriesController::class, 'trash'])
+                ->name('trash');
             Route::get('/create', [CategoriesController::class, 'create'])
                 ->name('create');
             Route::get('/{category}', [CategoriesController::class, 'show'])
@@ -26,6 +28,11 @@ Route::group([
                 ->name('update');
             Route::delete('/{category}', [CategoriesController::class, 'destroy'])
                 ->name('destroy');
+
+            Route::put('/trash/{category}/restore', [CategoriesController::class, 'restore'])
+                ->name('restore');
+            Route::delete('/trash/{category}', [CategoriesController::class, 'forceDelete'])
+                ->name('forceDelete');
         });
 
 

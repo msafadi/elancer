@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -31,6 +32,54 @@ class Project extends Model
     protected $appends = [
         'type_name',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope('active', function(Builder $builder) {
+            $builder->where('status', '=', 'open');
+        });
+    }
+
+    public function scopeFilter(Builder $builder, $filters = [])
+    {
+        $filters = array_merge([
+            'type' => null,
+            'status' => null,
+            'budget_min' => null,
+            'budget_max' => null,
+        ], $filters);
+
+        if ($filters['type']) {
+            $builder->where('type', '=', $filters['type']);
+        }
+
+        $builder->when($filters['status'], function($builder, $value) {
+            $builder->where('status', '=', $value);
+        });
+
+        $builder->when($filters['budget_min'], function($builder, $value) {
+            $builder->where('budget', '>=', $value);
+        });
+        
+        $builder->when($filters['budget_max'], function($builder, $value) {
+            $builder->where('budget', '<=', $value);
+        });
+    }
+
+    public function scopeHigh(Builder $builder)
+    {
+        $builder->orderBy('budget', 'DESC');
+    }
+
+    public function scopeClosed(Builder $builder)
+    {
+        $builder->where('status', 'closed');
+    }
+
+    public function scopeHourly(Builder $builder)
+    {
+        $builder->where('type', 'hourly');
+    }
 
     public function user()
     {
