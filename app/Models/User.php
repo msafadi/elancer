@@ -68,6 +68,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Contract::class, 'freelancer_id', 'id');
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
+
     public function proposedProjects()
     {
         return $this->belongsToMany(
@@ -153,5 +158,15 @@ class User extends Authenticatable implements MustVerifyEmail
         ]);
 
         return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
+    }
+
+    public function hasAbility($ability)
+    {
+        foreach ($this->roles as $role) {
+            if (in_array($ability, $role->abilities)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

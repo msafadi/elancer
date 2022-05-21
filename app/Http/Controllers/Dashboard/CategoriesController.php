@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Rules\FilterRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -32,9 +33,19 @@ class CategoriesController extends Controller
         'name.required' => 'The :attribute field is mandatory.'
     ];
 
+    public function __construct()
+    {
+        $this->authorizeResource(Category::class);
+    }
+
     // Actions
     public function index()
     {
+        // if (Gate::denies('categories.view')) {
+        //     abort(403);
+        // }
+        //$this->authorize('view-any', Category::class);
+        
         //$categories = DB::table('categories')->get();
         $categories = Category::leftJoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
             ->select([
@@ -75,6 +86,11 @@ class CategoriesController extends Controller
 
     public function create()
     {
+        // if (Gate::denies('categories.create')) {
+        //     abort(403);
+        // }
+        $this->authorize('create', Category::class);
+
         $parents = Category::all();
         $category = new Category;
         return view('categories.create', compact('category', 'parents'));
@@ -82,6 +98,11 @@ class CategoriesController extends Controller
 
     public function store(Request $request)
     {
+
+        // if (Gate::denies('categories.create')) {
+        //     abort(403);
+        // }
+        $this->authorize('create', Category::class);
 
         $clean = $request->validate($this->rules(), $this->messages);
         //dd ($clean, $request->all());
@@ -115,18 +136,21 @@ class CategoriesController extends Controller
             $data['slug'] = Str::slug($data['name']);
         }
 
-        $category = Category::create( $data );
+        // $category = Category::create( $data );
+        dispatch(new \App\Jobs\CreateCategoryJob($data));
 
         // PRG: Post Redirect Get
         return redirect()
             ->route('categories.index')
-            ->with('success', 'Category created!');
+            ->with('success', 'Category is being created!');
 
     }
 
     public function edit($id)
     {
         $category = Category::findOrFail($id);
+
+        $this->authorize('update', $category);
 
         $parents = Category::all();
 
@@ -138,6 +162,7 @@ class CategoriesController extends Controller
     public function update(Request $request, Category $category)
     {
         //$category = Category::findOrFail($id);
+        $this->authorize('update', $category);
 
         $clean = $request->validate($this->rules(), $this->messages);
 
@@ -156,6 +181,10 @@ class CategoriesController extends Controller
 
     public function destroy($id)
     {
+
+        $category = Category::findOrFail($id);
+        $this->authorize('delete', $category);
+
         // DB::table('categories')->where('id', $id)->delete();
         // Category::where('id', $id)->delete();
         Category::destroy($id);

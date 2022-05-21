@@ -40,6 +40,12 @@ return [
         'user' => env('NEPRAS_USER'),
         'pass' => env('NEPRAS_PASS'),
         'sender' => env('NEPRAS_SENDER'),
-    ]
+    ],
+
+    'thawani' => [
+        'secret_key' => env('THAWANI_SECRET_KEY'),
+        'publishable_key' => env('THAWANI_PUBLISHABLE_KEY'),
+        'mode' => 'test',
+    ],
 
 ];

@@ -1,10 +1,14 @@
 <?php
 
-use App\Http\Controllers\MessagesController;
-use App\Http\Controllers\OtpController;
-use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\HomeController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\PaymentsCallbackController;
+use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\ProjectsController;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +21,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
+Route::group([
+    'prefix' => LaravelLocalization::setLocale(),
+], function() {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    Route::get('projects/{project}', [ProjectsController::class, 'show'])
+        ->name('projects.show');
 });
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -33,9 +44,6 @@ Route::get('/dashboard', function () {
 // ], function() {
 //     require __DIR__.'/auth.php';
 // });
-
-Route::get('projects/{project}', [ProjectsController::class, 'show'])
-    ->name('projects.show');
 
 Route::get('messages', [MessagesController::class, 'create'])
     ->name('messages');
@@ -51,3 +59,8 @@ require __DIR__.'/dashboard.php';
 require __DIR__.'/freelancer.php';
 
 require __DIR__.'/client.php';
+
+
+Route::get('payments/create', [PaymentsController::class, 'create'])->name('payments.create');
+Route::get('/payments/callback/success', [PaymentsCallbackController::class, 'success'])->name('payments.success');
+Route::get('/payments/callback/cancel', [PaymentsCallbackController::class, 'cancel'])->name('payments.cancel');

@@ -133,7 +133,7 @@ class ProjectsController extends Controller
 
         return redirect()
             ->route('client.projects.index')
-            ->with('success', 'Project upated');
+            ->with('success', __('Project upated'));
 
     }
 
@@ -160,7 +160,7 @@ class ProjectsController extends Controller
 
         return redirect()
             ->route('client.projects.index')
-            ->with('success', 'Project deleted');
+            ->with('success', __('Project deleted'));
     }
 
     protected function categories()

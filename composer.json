@@ -13,6 +13,7 @@
         "laravel/nexmo-notification-channel": "^2.5",
         "laravel/sanctum": "^2.12",
         "laravel/tinker": "^2.5",
+        "mcamara/laravel-localization": "^1.6",
         "nexmo/laravel": "^2.4",
         "pusher/pusher-php-server": "^7.0",
         "symfony/intl": "^5.3",
@@ -32,7 +33,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

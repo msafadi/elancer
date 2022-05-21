@@ -7,13 +7,13 @@
             <div class="row">
                 <div class="col-md-12">
 
-                    <h2>Log In</h2>
+                    <h2>{{ __('Log In') }}</h2>
 
                     <!-- Breadcrumbs -->
                     <nav id="breadcrumbs" class="dark">
                         <ul>
-                            <li><a href="#">Home</a></li>
-                            <li>Log In</li>
+                            <li><a href="#">{{ __('Home') }}</a></li>
+                            <li>{{ __('Log In') }}</li>
                         </ul>
                     </nav>
 
@@ -33,9 +33,9 @@
                 <div class="login-register-page">
                     <!-- Welcome Text -->
                     <div class="welcome-text">
-                        <h3>We're glad to see you again!</h3>
+                        <h3>{{ __("We're glad to see you again!") }}</h3>
                         @if (Route::has('register'))
-                        <span>Don't have an account? <a href="{{ route('register') }}">Sign Up!</a></span>
+                        <span>{{ __("Don't have an account?") }} <a href="{{ route('register') }}">Sign Up!</a></span>
                         @endif
                     </div>
 
@@ -50,12 +50,12 @@
                         @csrf
                         <div class="input-with-icon-left">
                             <i class="icon-material-baseline-mail-outline"></i>
-                            <input type="text" class="input-text with-border" name="email" id="emailaddress" placeholder="Email Address" required />
+                            <input type="text" class="input-text with-border" name="email" id="emailaddress" placeholder="{{ __('Email Address') }}" required />
                         </div>
 
                         <div class="input-with-icon-left">
                             <i class="icon-material-outline-lock"></i>
-                            <input type="password" class="input-text with-border" name="password" id="password" placeholder="Password" required />
+                            <input type="password" class="input-text with-border" name="password" id="password" placeholder="{{ __('Password') }}" required />
                         </div>
                         @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}" class="forgot-password">Forgot Password?</a>

@@ -1,7 +1,11 @@
 @extends('layouts.dashboard')
 
 @section('page-title')
-    Categories <small><a href="{{ route('categories.create') }}" class="btn btn-sm btn-outline-primary">Create</a></small>
+    Categories
+    {{-- @if (Auth::user()->can('categories.create')) --}}
+    @can('create', App\Models\Category::class)
+    <small><a href="{{ route('categories.create') }}" class="btn btn-sm btn-outline-primary">Create</a></small>
+    @endcan
 @endsection
 
 @section('content')
@@ -29,13 +33,20 @@
                 <td>{{ $category->slug }}</td>
                 <td>{{ $category->parent_name }}</td>
                 <td>{{ $category->created_at }}</td>
-                <td><a href="{{ route('categories.edit', [$category->id]) }}" class="btn btn-sm btn-dark">Edit</a></td>
                 <td>
+                    @can('update', $category)
+                    <a href="{{ route('categories.edit', [$category->id]) }}" class="btn btn-sm btn-dark">Edit</a>
+                    @endcan
+                </td>
+                <td>
+                    {{-- @if (Gate::allows('categories.delete')) --}}
+                    @can('delete', $category)
                     <form action="{{ route('categories.destroy', $category->id) }}" method="post">
                         @csrf
                         @method('delete')
                         <button class="btn btn-sm btn-danger">Delete</button>
                     </form>
+                    @endcan
                 </td>
             </tr>
             @endforeach

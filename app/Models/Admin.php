@@ -15,4 +15,9 @@ class Admin extends User
     protected $fillable = [
         'name', 'email', 'super_admin', 'status', 'remember_token',
     ];
+
+    public function hasAbility($ability)
+    {
+        return true;
+    }
 }

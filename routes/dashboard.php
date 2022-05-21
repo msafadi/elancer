@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Dashboard\CategoriesController;
+use App\Http\Controllers\Dashboard\ConfigController;
+use App\Http\Controllers\Dashboard\RolesController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -8,6 +10,11 @@ Route::group([
     'namespace' => 'Dashboard',
     'middleware' => ['auth:admin,web'],
 ], function() {
+
+    Route::resource('roles', 'RolesController');
+
+    Route::get('config', [ConfigController::class, 'index'])->name('config');
+    Route::post('config', [ConfigController::class, 'store']);
 
     Route::prefix('/categories')
         ->as('categories.')

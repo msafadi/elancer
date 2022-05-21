@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ App::currentLocale() }}" dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}">
 
 <head>
 
@@ -11,7 +11,11 @@
 
     <!-- CSS
 ================================================== -->
+    @if ( LaravelLocalization::getCurrentLocaleDirection() == 'rtl')
+    <link rel="stylesheet" href="{{ asset('assets/front/css/style.rtl.css') }}">
+    @else
     <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
+    @endif
     <link rel="stylesheet" href="{{ asset('assets/front/css/colors/blue.css') }}">
 
 </head>
@@ -41,7 +45,7 @@
                         <nav id="navigation">
                             <ul id="responsive">
 
-                                <li><a href="#">Home</a>
+                                <li><a href="{{ route('home') }}">{{ __('Home') }}</a>
                                     <ul class="dropdown-nav">
                                         <li><a href="index.html">Home 1</a></li>
                                         <li><a href="index-2.html">Home 2</a></li>
@@ -49,9 +53,9 @@
                                     </ul>
                                 </li>
 
-                                <li><a href="#">Find Work</a>
+                                <li><a href="#">{{ trans('Find Work') }}</a>
                                     <ul class="dropdown-nav">
-                                        <li><a href="#">Browse Jobs</a>
+                                        <li><a href="#">@lang('Browse Jobs')</a>
                                             <ul class="dropdown-nav">
                                                 <li><a href="jobs-list-layout-full-page-map.html">Full Page List + Map</a></li>
                                                 <li><a href="jobs-grid-layout-full-page-map.html">Full Page Grid + Map</a></li>
@@ -61,7 +65,7 @@
                                                 <li><a href="jobs-grid-layout.html">Grid Layout</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="#">Browse Tasks</a>
+                                        <li><a href="#">{{ Lang::get('Browse Tasks') }}</a>
                                             <ul class="dropdown-nav">
                                                 <li><a href="tasks-list-layout-1.html">List Layout 1</a></li>
                                                 <li><a href="tasks-list-layout-2.html">List Layout 2</a></li>
@@ -76,9 +80,9 @@
                                     </ul>
                                 </li>
 
-                                <li><a href="#">For Employers</a>
+                                <li><a href="#">{{ __('For Employers') }}</a>
                                     <ul class="dropdown-nav">
-                                        <li><a href="#">Find a Freelancer</a>
+                                        <li><a href="#">{{ __('Find a Freelancer') }}</a>
                                             <ul class="dropdown-nav">
                                                 <li><a href="freelancers-grid-layout-full-page.html">Full Page Grid</a></li>
                                                 <li><a href="freelancers-grid-layout.html">Grid Layout</a></li>
@@ -128,6 +132,19 @@
                                         <li><a href="pages-login.html">Login & Register</a></li>
                                         <li><a href="pages-404.html">404 Page</a></li>
                                         <li><a href="pages-contact.html">Contact</a></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a href="#" class="current">{{ __('Language') }}</a>
+                                    <ul class="dropdown-nav">
+                                        @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                        <li>
+                                            <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                                {{ $properties['native'] }}
+                                            </a>
+                                        </li>
+                                        @endforeach
                                     </ul>
                                 </li>
 
@@ -185,7 +202,7 @@
                                     <ul class="user-menu-small-nav">
                                         <li><a href="dashboard.html"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
                                         <li><a href="dashboard-settings.html"><i class="icon-material-outline-settings"></i> Settings</a></li>
-                                        <li><a  href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout').submit();"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+                                        <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout').submit();"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
                                     </ul>
                                     <form action="{{ route('logout') }}" method="post" style="display: none;" id="logout">
                                         @csrf
@@ -218,7 +235,7 @@
         <div class="clearfix"></div>
         <!-- Header Container / End -->
 
-            {{ $slot }}
+        {{ $slot }}
 
         <!-- Footer
 ================================================== -->

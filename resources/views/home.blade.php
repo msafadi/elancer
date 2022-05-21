@@ -205,7 +205,7 @@
 
                     <!-- Jobs Container -->
                     <div class="tasks-list-container compact-list margin-top-35">
-
+                        @foreach ($recent_projects as $project)
                         <!-- Task -->
                         <a href="single-task-page.html" class="task-listing">
 
@@ -214,16 +214,15 @@
 
                                 <!-- Details -->
                                 <div class="task-listing-description">
-                                    <h3 class="task-listing-title">Food Delviery Mobile App</h3>
+                                    <h3 class="task-listing-title">{{ $project->title }}</h3>
                                     <ul class="task-icons">
-                                        <li><i class="icon-material-outline-location-on"></i> San Francisco</li>
-                                        <li><i class="icon-material-outline-access-time"></i> 2 minutes ago</li>
+                                        <li><i class="icon-material-outline-location-on"></i> {{ $project->category->name }}</li>
+                                        <li><i class="icon-material-outline-access-time"></i> {{ $project->created_at->diffForHumans() }}</li>
                                     </ul>
                                     <div class="task-tags margin-top-15">
-                                        <span>iOS</span>
-                                        <span>Android</span>
-                                        <span>mobile apps</span>
-                                        <span>design</span>
+                                        @foreach ($project->tags as $tag)
+                                        <span>{{ $tag->name }}</span>
+                                        @endforeach
                                     </div>
                                 </div>
 
@@ -232,145 +231,14 @@
                             <div class="task-listing-bid">
                                 <div class="task-listing-bid-inner">
                                     <div class="task-offers">
-                                        <strong>$1,000 - $2,500</strong>
-                                        <span>Fixed Price</span>
+                                        <strong>{{ currency($project->budget) }}</strong>
+                                        <span>{{ $project->type }}</span>
                                     </div>
                                     <span class="button button-sliding-icon ripple-effect">Bid Now <i class="icon-material-outline-arrow-right-alt"></i></span>
                                 </div>
                             </div>
                         </a>
-
-                        <!-- Task -->
-                        <a href="single-task-page.html" class="task-listing">
-
-                            <!-- Job Listing Details -->
-                            <div class="task-listing-details">
-
-                                <!-- Details -->
-                                <div class="task-listing-description">
-                                    <h3 class="task-listing-title">2000 Words English to German</h3>
-                                    <ul class="task-icons">
-                                        <li><i class="icon-material-outline-location-off"></i> Online Job</li>
-                                        <li><i class="icon-material-outline-access-time"></i> 5 minutes ago</li>
-                                    </ul>
-                                    <div class="task-tags margin-top-15">
-                                        <span>copywriting</span>
-                                        <span>translating</span>
-                                        <span>editing</span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="task-listing-bid">
-                                <div class="task-listing-bid-inner">
-                                    <div class="task-offers">
-                                        <strong>$75</strong>
-                                        <span>Fixed Price</span>
-                                    </div>
-                                    <span class="button button-sliding-icon ripple-effect">Bid Now <i class="icon-material-outline-arrow-right-alt"></i></span>
-                                </div>
-                            </div>
-                        </a>
-
-                        <!-- Task -->
-                        <a href="single-task-page.html" class="task-listing">
-
-                            <!-- Job Listing Details -->
-                            <div class="task-listing-details">
-
-                                <!-- Details -->
-                                <div class="task-listing-description">
-                                    <h3 class="task-listing-title">Fix Python Selenium Code</h3>
-                                    <ul class="task-icons">
-                                        <li><i class="icon-material-outline-location-off"></i> Online Job</li>
-                                        <li><i class="icon-material-outline-access-time"></i> 30 minutes ago</li>
-                                    </ul>
-                                    <div class="task-tags margin-top-15">
-                                        <span>Python</span>
-                                        <span>Flask</span>
-                                        <span>API Development</span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="task-listing-bid">
-                                <div class="task-listing-bid-inner">
-                                    <div class="task-offers">
-                                        <strong>$100 - $150</strong>
-                                        <span>Hourly Rate</span>
-                                    </div>
-                                    <span class="button button-sliding-icon ripple-effect">Bid Now <i class="icon-material-outline-arrow-right-alt"></i></span>
-                                </div>
-                            </div>
-                        </a>
-
-                        <!-- Task -->
-                        <a href="single-task-page.html" class="task-listing">
-
-                            <!-- Job Listing Details -->
-                            <div class="task-listing-details">
-
-                                <!-- Details -->
-                                <div class="task-listing-description">
-                                    <h3 class="task-listing-title">WordPress Theme Installation</h3>
-                                    <ul class="task-icons">
-                                        <li><i class="icon-material-outline-location-off"></i> Online Job</li>
-                                        <li><i class="icon-material-outline-access-time"></i> 1 hour ago</li>
-                                    </ul>
-                                    <div class="task-tags margin-top-15">
-                                        <span>WordPress</span>
-                                        <span>Theme Installation</span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="task-listing-bid">
-                                <div class="task-listing-bid-inner">
-                                    <div class="task-offers">
-                                        <strong>$100</strong>
-                                        <span>Fixed Price</span>
-                                    </div>
-                                    <span class="button button-sliding-icon ripple-effect">Bid Now <i class="icon-material-outline-arrow-right-alt"></i></span>
-                                </div>
-                            </div>
-                        </a>
-
-                        <!-- Task -->
-                        <a href="single-task-page.html" class="task-listing">
-
-                            <!-- Job Listing Details -->
-                            <div class="task-listing-details">
-
-                                <!-- Details -->
-                                <div class="task-listing-description">
-                                    <h3 class="task-listing-title">PHP Core Website Fixes</h3>
-                                    <ul class="task-icons">
-                                        <li><i class="icon-material-outline-location-off"></i> Online Job</li>
-                                        <li><i class="icon-material-outline-access-time"></i> 1 hour ago</li>
-                                    </ul>
-                                    <div class="task-tags margin-top-15">
-                                        <span>PHP</span>
-                                        <span>MySQL Administration</span>
-                                        <span>API Development</span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="task-listing-bid">
-                                <div class="task-listing-bid-inner">
-                                    <div class="task-offers">
-                                        <strong>$50 - $80</strong>
-                                        <span>Hourly Rate</span>
-                                    </div>
-                                    <span class="button button-sliding-icon ripple-effect">Bid Now <i class="icon-material-outline-arrow-right-alt"></i></span>
-                                </div>
-                            </div>
-                        </a>
-
+                        @endforeach
 
                     </div>
                     <!-- Jobs Container / End -->
